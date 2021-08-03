@@ -117,4 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label4.Text" xml:space="preserve">
+    <value>To use this program you need:
+- Download VB-CABLE Virtual Audio Device;
+- Follow all instructions of the VB-CABLE Virtual Audio Device installer;
+- Enable CABLE Input and CABLE Output in Windows sound settings;
+- Select the language of recognition and translation in the settings 
+(automatically from English to Russian).</value>
+  </data>
 </root>
