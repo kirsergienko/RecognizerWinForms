@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -13,7 +14,9 @@ namespace Recognizer
 
         private string outputLanguage = "ru-RU";
 
-        private bool clearStopButton = false;
+        private bool fromMicrophone = false;
+
+        private string str;
 
         public Form1()
         {
@@ -27,14 +30,27 @@ namespace Recognizer
 
             button2.Enabled = true;
 
-            while (check)
+            if (fromMicrophone)
             {
-                NewRecognizer newRecognizer = new NewRecognizer();
+                while (check)
+                {
+                    RecognizeFromMic newRecognizer = new RecognizeFromMic();
 
-                string recognizedText = await newRecognizer.StartRecognize(inputLanguage);
+                    string recognizedText = await newRecognizer.StartRecognize(inputLanguage);
 
-                Translate(recognizedText);
+                    Translate(recognizedText);
+                }
+            }
+            else
+            {
+                while (check)
+                {
+                    NewRecognizer newRecognizer = new NewRecognizer();
 
+                    string recognizedText = await newRecognizer.StartRecognize(inputLanguage);
+
+                    Translate(recognizedText);
+                }
             }
         }
 
@@ -42,9 +58,13 @@ namespace Recognizer
         {
             string translatedText = await Translator.Translate(recognizedText, outputLanguage);
 
+            if(translatedText.Length > 1)
+            str += translatedText + " \n";
+
             Action action = new Action(() =>
             {
-                richTextBox1.Text += translatedText + " \n";
+                if (translatedText.Length > 1)
+                    richTextBox1.Text = translatedText;
             });
 
             Invoke(action);
@@ -64,10 +84,7 @@ namespace Recognizer
 
             button2.Enabled = false;
 
-            if (clearStopButton)
-            {
-                richTextBox1.Clear();
-            }
+
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -79,7 +96,7 @@ namespace Recognizer
 
         private void button3_Click(object sender, EventArgs e)
         {
-            clearStopButton = checkBox1.Checked;
+            fromMicrophone = checkBox1.Checked;
             #region InputLanguage
             switch (comboBox1.Text)
             {
@@ -356,6 +373,20 @@ namespace Recognizer
         private void button4_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            HistoryForm historyForm = new HistoryForm();
+
+            historyForm.SetRichTextBox1Value(str.ToString());
+
+            historyForm.Show();
+        }
+
+        public string GetHistory()
+        {
+            return str.ToString();
         }
     }
 }
