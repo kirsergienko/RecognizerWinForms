@@ -7,6 +7,7 @@ namespace Recognizer
     public class NewRecognizer
     {
         private SpeechRecognitionResult result;
+        private string deviceID;
 
         public async Task<string> StartRecognize(string inputLanguage)
         {
@@ -20,14 +21,17 @@ namespace Recognizer
 
         private async Task FromMic(SpeechConfig speechConfig, string inputLanguage)
         {
+            await Task.Run(() =>
+            {
+                deviceID = AudioDevices.GetDeviceID()["CABLE Output (VB-Audio Virtual Cable)"];
+            }); 
 
-            using var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
+            using var audioConfig = AudioConfig.FromMicrophoneInput(deviceID);
 
             using var recognizer = new SpeechRecognizer(speechConfig, inputLanguage, audioConfig);
 
             result = await recognizer.RecognizeOnceAsync();
 
         }
-
     }
 }

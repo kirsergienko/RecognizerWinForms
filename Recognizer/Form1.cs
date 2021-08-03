@@ -22,6 +22,7 @@ namespace Recognizer
 
         private void button1_Click(object sender, EventArgs e)
         {
+            button1.Enabled = false;
             Start();
         }
 
@@ -44,7 +45,7 @@ namespace Recognizer
 
         private async Task Translate(string recognizedText)
         {
-            string translatedText = await Translator.Translate(recognizedText, "en-US");
+            string translatedText = await Translator.Translate(recognizedText, "ru-RU");
 
             Action action = new Action(() =>
             {
@@ -57,6 +58,8 @@ namespace Recognizer
         private void button2_Click(object sender, EventArgs e)
         {
             check = false;
+
+            button1.Enabled = true;
 
             button2.Enabled = false;
 
