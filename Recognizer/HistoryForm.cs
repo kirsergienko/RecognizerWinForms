@@ -34,5 +34,11 @@ namespace Recognizer
         {
             this.Close();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            richtextbox1Value = "";
+            richTextBox1.Clear();
+        }
     }
 }

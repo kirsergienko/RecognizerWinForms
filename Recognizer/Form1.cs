@@ -362,6 +362,7 @@ namespace Recognizer
                     break;
             }
             #endregion 
+            button3.Enabled = false;
 
         }
 
@@ -387,6 +388,21 @@ namespace Recognizer
         public string GetHistory()
         {
             return str.ToString();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            button3.Enabled = true;
         }
     }
 }
