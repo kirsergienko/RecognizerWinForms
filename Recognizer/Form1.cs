@@ -380,6 +380,7 @@ namespace Recognizer
         {
             HistoryForm historyForm = new HistoryForm();
 
+            if(str != null)
             historyForm.SetRichTextBox1Value(str.ToString());
 
             historyForm.Show();
