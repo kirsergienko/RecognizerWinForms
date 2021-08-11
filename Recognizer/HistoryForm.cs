@@ -13,11 +13,11 @@ namespace Recognizer
     public partial class HistoryForm : Form
     {
 
-        private string richtextbox1Value;
+        private List<string> _history;
 
-        public void SetRichTextBox1Value(string text)
+        public void SetRichTextBox1Value(List<string> history)
         {
-           richtextbox1Value = text;
+            _history = history;
         }
 
         public HistoryForm()
@@ -27,18 +27,15 @@ namespace Recognizer
 
         private void HistoryForm_Load(object sender, EventArgs e)
         {
-            richTextBox1.Text = richtextbox1Value;
+            foreach (string text in _history)
+            {
+                richTextBox1.Text += text + "\n";
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            richtextbox1Value = "";
-            richTextBox1.Clear();
         }
     }
 }

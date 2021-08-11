@@ -142,8 +142,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NewRecognizer.cs" />
-    <Compile Include="RecognizeFromMic.cs" />
+    <Compile Include="Resultator.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Translator.cs" />
     <EmbeddedResource Include="Form1.resx">

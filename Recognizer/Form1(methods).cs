@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.CognitiveServices.Speech;
+using Microsoft.CognitiveServices.Speech.Audio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,26 +10,7 @@ namespace Recognizer
 {
     public partial class Form1
     {
-        public string GetHistory()
-        {
-            return str.ToString();
-        }
-
-        private async Task Translate(string recognizedText)
-        {
-            string translatedText = await Translator.Translate(recognizedText, settings.OutputLanguage);
-
-            if (translatedText.Length > 1)
-                str += translatedText + " \n";
-
-            Action action = new Action(() =>
-            {
-                if (translatedText.Length > 1)
-                    richTextBox1.Text = translatedText;
-            });
-
-            Invoke(action);
-        }
+        List<string> history = new List<string>();
 
         private async Task Start()
         {
@@ -35,29 +18,73 @@ namespace Recognizer
 
             button2.Enabled = true;
 
-            if (fromMicrophone)
+            ProfanityOption profanityOption = ProfanityOption.Raw;
+            var speechConfig = SpeechConfig.FromSubscription("52304639cdad40e28580855cc618857a", "eastus");
+            speechConfig.SetProfanity(profanityOption);
+            string deviceID = "";
+
+            if (settings.FromMicrophone)
             {
+                var audioConfig = AudioConfig.FromDefaultMicrophoneInput();
                 while (check)
                 {
-                    RecognizeFromMic newRecognizer = new RecognizeFromMic();
-
-                    string recognizedText = await newRecognizer.StartRecognize(settings.InputLanguage);
-
-                    Translate(recognizedText);
+                    await FromDevice(speechConfig,audioConfig);
                 }
             }
             else
             {
+                await Task.Run(() =>
+                {
+                    deviceID = AudioDevices.GetDeviceID()["CABLE Output (VB-Audio Virtual Cable)"];
+                });
+
+                var audioConfig = AudioConfig.FromMicrophoneInput(deviceID);
+
                 while (check)
                 {
-                    NewRecognizer newRecognizer = new NewRecognizer();
-
-                    string recognizedText = await newRecognizer.StartRecognize(settings.InputLanguage);
-
-                    Translate(recognizedText);
+                    await FromDevice(speechConfig, audioConfig);
+                    
                 }
             }
         }
+
+        private async Task FromDevice(SpeechConfig speechConfig, AudioConfig audioConfig)
+        {
+            using (audioConfig)
+            {
+                using var recognizer = new SpeechRecognizer(speechConfig, settings.InputLanguage, audioConfig);
+
+                recognizer.Recognizing += (o, e) =>
+                {
+                    Action action = new Action(async () =>
+                    {
+                        richTextBox1.Text = await Translator.Translate(Resultator.GetResult(e), settings.OutputLanguage);
+                    });
+                    Invoke(action);
+                };
+
+                recognizer.Recognized += (o, e) =>
+                {
+                    Action action = new Action(async () =>
+                    {
+                        history.Add(await Translator.Translate(Resultator.GetResult(e), settings.OutputLanguage));
+                    });
+                    Invoke(action);
+                };
+
+                await recognizer.StartContinuousRecognitionAsync();
+
+                while (check)
+                {
+                    await Task.Delay(1000);
+                }
+
+                await recognizer.StopContinuousRecognitionAsync();
+            }
+            
+        }
+
+       
 
         private string SetLanguage(string language)
         {

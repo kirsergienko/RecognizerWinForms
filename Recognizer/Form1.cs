@@ -13,11 +13,6 @@ namespace Recognizer
 
         private Settings settings = new Settings();
 
-        private bool fromMicrophone = false;
-
-        // history
-        private string str;
-
         public Form1()
         {
             InitializeComponent();
@@ -34,9 +29,12 @@ namespace Recognizer
 
                 comboBox3.SelectedItem = userSettings.OutputLanguageName;
 
+                checkBox1.Checked = userSettings.FromMicrophone;
+
             }
             catch (Exception ex)
             {
+
                 settings.InputLanguageName = "English";
 
                 settings.InputLanguage = "en-US";
@@ -73,8 +71,7 @@ namespace Recognizer
         {
             HistoryForm historyForm = new HistoryForm();
 
-            if (str != null)
-                historyForm.SetRichTextBox1Value(str.ToString());
+            historyForm.SetRichTextBox1Value(history);
 
             historyForm.Show();
         }
@@ -82,6 +79,7 @@ namespace Recognizer
         private void button4_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
+            history.Clear();
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -95,7 +93,7 @@ namespace Recognizer
         #region Settings
         private void button3_Click(object sender, EventArgs e)
         {
-            fromMicrophone = checkBox1.Checked;
+            settings.FromMicrophone = checkBox1.Checked;
 
             settings.InputLanguageName = comboBox1.Text;
 
