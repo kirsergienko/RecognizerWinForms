@@ -81,13 +81,6 @@ namespace Recognizer
             richTextBox1.Clear();
             history.Clear();
         }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-            richTextBox1.SelectionStart = richTextBox1.Text.Length;
-
-            richTextBox1.ScrollToCaret();
-        }
         #endregion
 
         #region Settings
