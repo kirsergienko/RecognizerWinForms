@@ -8,7 +8,7 @@ namespace Recognizer
     public static class Translator
     {
 
-        private const string Key = "f01ea9a8d6194716af4cc6b37b7f866f";
+        private const string Key ;
 
         private static readonly HttpClient client = new HttpClient
         {
