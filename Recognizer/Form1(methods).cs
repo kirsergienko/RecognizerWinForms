@@ -19,7 +19,7 @@ namespace Recognizer
             button2.Enabled = true;
 
             ProfanityOption profanityOption = ProfanityOption.Raw;
-            var speechConfig = SpeechConfig.FromSubscription("52304639cdad40e28580855cc618857a", "eastus");
+            var speechConfig = ", "eastus");
             speechConfig.SetProfanity(profanityOption);
             string deviceID = "";
 
